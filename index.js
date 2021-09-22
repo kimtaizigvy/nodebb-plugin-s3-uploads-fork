@@ -1,6 +1,6 @@
-let Package = require("./package.json");
+var Package = require("./package.json");
 
-let AWS = require("aws-sdk"),
+var AWS = require("aws-sdk"),
 	mime = require("mime"),
 	uuid = require("uuid").v4,
 	fs = require("fs"),
@@ -13,12 +13,12 @@ let AWS = require("aws-sdk"),
 	meta = require.main.require("./src/meta"),
 	db = require.main.require("./src/database");
 
-let plugin = {}
+var plugin = {}
 
 "use strict";
 
-let S3Conn = null;
-let settings = {
+var S3Conn = null;
+var settings = {
 	"accessKeyId": false,
 	"secretAccessKey": false,
 	"region": process.env.AWS_DEFAULT_REGION || "us-east-1",
@@ -27,8 +27,8 @@ let settings = {
 	"path": process.env.S3_UPLOADS_PATH || undefined
 };
 
-let accessKeyIdFromDb = false;
-let secretAccessKeyFromDb = false;
+var accessKeyIdFromDb = false;
+var secretAccessKeyFromDb = false;
 
 function fetchSettings(callback) {
 	db.getObjectFields(Package.name, Object.keys(settings), function (err, newSettings) {
@@ -137,7 +137,7 @@ plugin.load = function (params, callback) {
 		if (err) {
 			return winston.error(err.message);
 		}
-		let adminRoute = "/admin/plugins/s3-uploads";
+		var adminRoute = "/admin/plugins/s3-uploads";
 
 		params.router.get(adminRoute, params.middleware.applyCSRF, params.middleware.admin.buildHeader, renderAdmin);
 		params.router.get("/api" + adminRoute, params.middleware.applyCSRF, renderAdmin);
@@ -151,13 +151,13 @@ plugin.load = function (params, callback) {
 
 function renderAdmin(req, res) {
 	// Regenerate csrf token
-	let token = req.csrfToken();
+	var token = req.csrfToken();
 
-	let forumPath = nconf.get('url');
-	if(forumPath.split("").reverse()[0] !== "/" ){
+	var forumPath = nconf.get('url');
+	if(forumPath.split("").reverse()[0] != "/" ){
 		forumPath = forumPath + "/";
 	}
-	let data = {
+	var data = {
 		bucket: settings.bucket,
 		host: settings.host,
 		path: settings.path,
@@ -172,8 +172,8 @@ function renderAdmin(req, res) {
 }
 
 function s3settings(req, res, next) {
-	let data = req.body;
-	let newSettings = {
+	var data = req.body;
+	var newSettings = {
 		bucket: data.bucket || "",
 		host: data.host || "",
 		path: data.path || "",
@@ -184,8 +184,8 @@ function s3settings(req, res, next) {
 }
 
 function credentials(req, res, next) {
-	let data = req.body;
-	let newSettings = {
+	var data = req.body;
+	var newSettings = {
 		accessKeyId: data.accessKeyId || "",
 		secretAccessKey: data.secretAccessKey || ""
 	};
@@ -218,8 +218,8 @@ plugin.uploadImage = function (data, callback) {
 		return callback(new Error("[[error:file-too-big, " + meta.config.maximumFileSize + "]]"));
 	}
 
-	let type = image.url ? "url" : "file";
-	let allowedMimeTypes = ['image/png', 'image/jpeg', 'image/gif'];
+	var type = image.url ? "url" : "file";
+	var allowedMimeTypes = ['image/png', 'image/jpeg', 'image/gif'];
 
 	if (type === "file") {
 		if (!image.path) {
