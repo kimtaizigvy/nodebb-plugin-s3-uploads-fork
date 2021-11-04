@@ -1,6 +1,6 @@
 {
-  "name": "nodebb-plugin-s3-uploads-fork",
-  "version": "0.5.1",
+  "name": "@tailee/nodebb-plugin-s3-uploads",
+  "version": "0.1.0",
   "description": "Original S3 upload plugin forked for 1.18+",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/digitalLumberjack/nodebb-plugin-s3-uploads.git"
+    "url": "https://github.com/kimtaizigvy/nodebb-plugin-s3-uploads-fork.git"
   },
   "keywords": [
     "nodebb",
@@ -27,7 +27,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/louiseMcMahon/nodebb-plugin-s3-uploads/issues"
+    "url": "https://github.com/kimtaizigvy/nodebb-plugin-s3-uploads-fork/issues"
   },
   "nbbpm": {
     "compatibility": "^1.18.0"

@@ -19,8 +19,8 @@ var plugin = {}
 
 var S3Conn = null;
 var settings = {
-	"accessKeyId": false,
-	"secretAccessKey": false,
+	"accessKeyId": process.env.AWS_ACCESS_KEY_ID ,
+	"secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY ,
 	"region": process.env.AWS_DEFAULT_REGION || "us-east-1",
 	"bucket": process.env.S3_UPLOADS_BUCKET || undefined,
 	"host": process.env.S3_UPLOADS_HOST || "s3.amazonaws.com",
@@ -46,39 +46,27 @@ function fetchSettings(callback) {
 		if (newSettings.accessKeyId) {
 			settings.accessKeyId = newSettings.accessKeyId;
 			accessKeyIdFromDb = true;
-		} else {
-			settings.accessKeyId = false;
 		}
 
 		if (newSettings.secretAccessKey) {
 			settings.secretAccessKey = newSettings.secretAccessKey;
 			secretAccessKeyFromDb = false;
-		} else {
-			settings.secretAccessKey = false;
 		}
 
 		if (!newSettings.bucket) {
 			settings.bucket = process.env.S3_UPLOADS_BUCKET || "";
-		} else {
-			settings.bucket = newSettings.bucket;
 		}
 
 		if (!newSettings.host) {
 			settings.host = process.env.S3_UPLOADS_HOST || "";
-		} else {
-			settings.host = newSettings.host;
 		}
 
 		if (!newSettings.path) {
 			settings.path = process.env.S3_UPLOADS_PATH || "";
-		} else {
-			settings.path = newSettings.path;
 		}
 
 		if (!newSettings.region) {
 			settings.region = process.env.AWS_DEFAULT_REGION || "";
-		} else {
-			settings.region = newSettings.region;
 		}
 
 		if (settings.accessKeyId && settings.secretAccessKey) {
@@ -226,7 +214,7 @@ plugin.uploadImage = function (data, callback) {
 			return callback(new Error("invalid image path"));
 		}
 
-		if (allowedMimeTypes.indexOf(mime.lookup(image.path)) === -1) {
+		if (allowedMimeTypes.indexOf(mime.getType(image.path)) === -1) {
 			return callback(new Error("invalid mime type"));
 		}
 
@@ -235,7 +223,7 @@ plugin.uploadImage = function (data, callback) {
 		});
 	}
 	else {
-		if (allowedMimeTypes.indexOf(mime.lookup(image.url)) === -1) {
+		if (allowedMimeTypes.indexOf(mime.getType(image.url)) === -1) {
 			return callback(new Error("invalid mime type"));
 		}
 		var filename = image.url.split("/").pop();
@@ -311,7 +299,7 @@ function uploadToS3(filename, err, buffer, callback) {
 		Key: s3KeyPath + uuid() + path.extname(filename),
 		Body: buffer,
 		ContentLength: buffer.length,
-		ContentType: mime.lookup(filename)
+		ContentType: mime.getType(filename)
 	};
 
 	S3().putObject(params, function (err) {
