@@ -1,6 +1,6 @@
 {
   "name": "@tailee/nodebb-plugin-s3-uploads",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Original S3 upload plugin forked for 1.18+",
   "main": "index.js",
   "scripts": {
