@@ -36,6 +36,7 @@ export AWS_SECRET_ACCESS_KEY="yyyyy"
 export S3_UPLOADS_BUCKET="zzzz"
 export S3_UPLOADS_HOST="host"
 export S3_UPLOADS_PATH="path"
+export ACL="ACL"
 ```
 
 **NOTE:** Asset host is optional - If you do not specify an asset host, then the default asset host is `<bucket>.s3.amazonaws.com`.
