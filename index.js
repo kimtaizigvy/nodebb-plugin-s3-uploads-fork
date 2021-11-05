@@ -11,9 +11,10 @@ var AWS = require("aws-sdk"),
 	gm = require("gm"),
 	im = gm.subClass({imageMagick: true}),
 	meta = require.main.require("./src/meta"),
-	db = require.main.require("./src/database");
+	db = require.main.require("./src/database"),
+	set = require("lodash").set();
 
-var plugin = {}
+var plugin = {};
 
 "use strict";
 
@@ -24,7 +25,8 @@ var settings = {
 	"region": process.env.AWS_DEFAULT_REGION || "us-east-1",
 	"bucket": process.env.S3_UPLOADS_BUCKET || undefined,
 	"host": process.env.S3_UPLOADS_HOST || "s3.amazonaws.com",
-	"path": process.env.S3_UPLOADS_PATH || undefined
+	"path": process.env.S3_UPLOADS_PATH || undefined,
+	"acl" : process.env.ACL || undefined
 };
 
 var accessKeyIdFromDb = false;
@@ -295,12 +297,15 @@ function uploadToS3(filename, err, buffer, callback) {
 
 	var params = {
 		Bucket: settings.bucket,
-		ACL: "public-read",
 		Key: s3KeyPath + uuid() + path.extname(filename),
 		Body: buffer,
 		ContentLength: buffer.length,
 		ContentType: mime.getType(filename)
 	};
+
+	if(settings.acl){
+		set(params, "ACL", settings.acl);
+	}
 
 	S3().putObject(params, function (err) {
 		if (err) {
