@@ -37,6 +37,7 @@ export S3_UPLOADS_BUCKET="zzzz"
 export S3_UPLOADS_HOST="host"
 export S3_UPLOADS_PATH="path"
 export ACL="ACL"
+export CLOUD_FRONT_DOMAIN="cloud-front-url"
 ```
 
 **NOTE:** Asset host is optional - If you do not specify an asset host, then the default asset host is `<bucket>.s3.amazonaws.com`.

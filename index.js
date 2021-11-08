@@ -26,7 +26,8 @@ var settings = {
 	"bucket": process.env.S3_UPLOADS_BUCKET || undefined,
 	"host": process.env.S3_UPLOADS_HOST || "s3.amazonaws.com",
 	"path": process.env.S3_UPLOADS_PATH || undefined,
-	"acl" : process.env.ACL || undefined
+	"acl" : process.env.ACL || undefined,
+	"cloudFrontDomain": process.env.CLOUD_FRONT_DOMAIN || undefined,
 };
 
 var accessKeyIdFromDb = false;
@@ -322,9 +323,11 @@ function uploadToS3(filename, err, buffer, callback) {
 			}
 		}
 
+		var urlPrefix = settings.cloudFrontDomain || host;
+
 		callback(null, {
 			name: filename,
-			url: host + "/" + params.Key
+			url: urlPrefix + "/" + params.Key
 		});
 	});
 }
